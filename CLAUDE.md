@@ -107,6 +107,46 @@ A PR that changes one side of a contract changes all of these together:
 
 Event and field names must match the PRD exactly (`snapshot`, `queueUpdated`, `nowPlaying`, `vote`, …).
 
+## Backend docs — read first, update always
+
+Before changing anything in `backend/`:
+
+1. Read `backend/docs/README.md`, then every doc relevant to the change.
+2. Make the code change.
+3. Update the affected docs **in the same commit**. Code that leaves a doc
+   wrong is not done.
+4. Log non-obvious choices (adding/removing a dependency, changing a data
+   shape or key name, dropping a feature) in `backend/docs/decisions.md`,
+   newest first, dated.
+
+Docs describe what exists. Anything not yet built is marked *Planned* and
+links to the PRD.
+
+### `backend/docs/` structure
+
+| File | Covers |
+|---|---|
+| `README.md` | Index, folder structure, doc-keeping rules |
+| `architecture.md` | Stack, code layout, request flow, built vs. planned |
+| `api.md` | Every HTTP endpoint: method, path, request, response, status codes |
+| `redis.md` | Redis connection, current usage, key model |
+| `configuration.md` | Every env var and the setting it drives |
+| `local-development.md` | Running, debugging, checking locally |
+| `deployment.md` | Railway setup, start command, healthcheck |
+| `decisions.md` | Dated decision log, newest first |
+
+Add a new file only when a topic doesn't fit an existing one (e.g.
+`websockets.md`), and add it to this table and to `backend/docs/README.md`.
+
+## Commands
+
+Backend (run from `backend/`):
+- Install: `uv sync`
+- Run: `uv run uvicorn config.asgi:application --port 8000 --reload`
+- Check: `uv run python manage.py check`
+- Health: `curl localhost:8000/api/health/`
+
+
 ## Gotchas
 
 - WebSocket connections are origin-checked (`config/asgi.py`): allowed = `CORS_ALLOWED_ORIGINS` + `DJANGO_ALLOWED_HOSTS`. Testing from a phone on the LAN needs its origin added to both and `npm run dev -- --host`.

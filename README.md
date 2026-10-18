@@ -9,7 +9,7 @@ See [PRD.md](PRD.md) for the product spec.
 | Part | Tech |
 |---|---|
 | `frontend/` | React 19 + TypeScript + Vite |
-| `backend/` | Django + DRF + Channels (ASGI via uvicorn), managed with `uv` |
+| `backend/` | Django + DRF (ASGI via uvicorn), managed with `uv` |
 | Real-time & cache | Redis |
 | State | Redis holds all party state too — no SQL database for now (see PRD.md) |
 
@@ -30,7 +30,7 @@ npm install
 npm run dev
 ```
 
-The Vite dev server proxies `/api` and `/ws` to Django, so no CORS setup is needed locally.
+The Vite dev server proxies `/api` to Django, so no CORS setup is needed locally.
 Check everything is wired up: `curl localhost:8000/api/health/` → `{"api":"ok","redis":"ok"}`.
 
 ## Deploy (Railway)
