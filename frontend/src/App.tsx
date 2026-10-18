@@ -54,6 +54,7 @@ function RoomPanel({ code, onLeave }: { code: string; onLeave: () => void }) {
   useEffect(() => {
     const ws = new WebSocket(roomSocketUrl(code))
     socket.current = ws
+    setState('connecting')
     ws.onopen = () => setState('live')
     ws.onclose = () => setState('closed')
     ws.onmessage = (e) => {
@@ -64,7 +65,13 @@ function RoomPanel({ code, onLeave }: { code: string; onLeave: () => void }) {
       setReactions((rs) => [...rs, r])
       setTimeout(() => setReactions((rs) => rs.filter((x) => x.id !== r.id)), 1800)
     }
-    return () => ws.close()
+    return () => {
+      // Detach handlers first: close events fire asynchronously, and a stale
+      // socket (e.g. from StrictMode's dev double-mount) must not overwrite the
+      // state of the socket that replaced it.
+      ws.onopen = ws.onclose = ws.onmessage = null
+      ws.close()
+    }
   }, [code])
 
   const send = (emoji: string) => socket.current?.send(JSON.stringify({ type: 'reaction', emoji }))
