@@ -13,8 +13,10 @@ middleware.
 and unused config. Starting from the minimum keeps each feature's additions
 explicit.
 
-**Affects:** The frontend demo in `frontend/src/App.tsx` still opens
-`/ws/<code>` and will fail to connect. Real-time comes back with the party
+**Affects:** The frontend room/WebSocket demo, the `/ws` Vite proxy and
+Redis mentions in the UI were removed in the same pass; the status pill now
+checks `/api/health/` at most twice per page load instead of polling every
+10 s. Real-time comes back with the party
 features (PRD "Realtime events"), most likely by re-adding Channels with the
 Redis channel layer.
 
