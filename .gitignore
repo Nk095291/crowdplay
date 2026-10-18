@@ -1,0 +1,16 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+.venv/
+db.sqlite3
+staticfiles/
+
+# Node / Vite
+node_modules/
+dist/
+
+# Env & OS
+.env
+.env.*
+!.env.example
+.DS_Store
