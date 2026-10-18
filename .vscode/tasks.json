@@ -1,0 +1,21 @@
+{
+  // Used as preLaunchTasks in launch.json: stop whatever is already listening on
+  // the port, so a leftover dev server never blocks a new launch.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "free port 8000 (backend)",
+      "type": "shell",
+      "command": "lsof -ti tcp:8000 -sTCP:LISTEN | xargs kill 2>/dev/null; sleep 1; exit 0",
+      "presentation": { "reveal": "silent", "close": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "free port 5173 (frontend)",
+      "type": "shell",
+      "command": "lsof -ti tcp:5173 -sTCP:LISTEN | xargs kill 2>/dev/null; sleep 1; exit 0",
+      "presentation": { "reveal": "silent", "close": true },
+      "problemMatcher": []
+    }
+  ]
+}

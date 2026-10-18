@@ -1,5 +1,4 @@
 from django.core.cache import cache
-from django.db import connection
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -7,12 +6,7 @@ from rest_framework.response import Response
 @api_view(["GET"])
 def health(request):
     """Liveness check used by the frontend status pill and Railway healthchecks."""
-    status = {"api": "ok", "database": "ok", "redis": "ok"}
-
-    try:
-        connection.ensure_connection()
-    except Exception:
-        status["database"] = "error"
+    status = {"api": "ok", "redis": "ok"}
 
     try:
         cache.set("healthcheck", "ok", timeout=5)

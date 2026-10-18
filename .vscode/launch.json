@@ -1,0 +1,47 @@
+{
+  // Run & Debug panel → "CrowdPlay: backend + frontend" starts both.
+  // Each one first stops anything already on its port (see tasks.json).
+  // Requires the Python Debugger extension (ms-python.debugpy) and Redis running
+  // (`brew services start redis`). First run: `cd backend && uv sync`, `cd frontend && npm install`.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend (Django · :8000)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["config.asgi:application", "--port", "8000", "--reload"],
+      "cwd": "${workspaceFolder}/backend",
+      "python": "${workspaceFolder}/backend/.venv/bin/python",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "preLaunchTask": "free port 8000 (backend)",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Frontend (Vite · :5173)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5173", "--strictPort"],
+      "cwd": "${workspaceFolder}/frontend",
+      "preLaunchTask": "free port 5173 (frontend)",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Browser (Chrome → :5173)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "CrowdPlay: backend + frontend",
+      "configurations": ["Backend (Django · :8000)", "Frontend (Vite · :5173)"],
+      "stopAll": true
+    }
+  ]
+}

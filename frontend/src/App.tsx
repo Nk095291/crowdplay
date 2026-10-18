@@ -38,7 +38,7 @@ function StatusPill() {
       {label}
       {health && (
         <span className="pill__detail">
-          API · DB · Redis
+          API · Redis
         </span>
       )}
     </div>
